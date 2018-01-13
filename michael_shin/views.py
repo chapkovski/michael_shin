@@ -6,7 +6,7 @@ from .models import Constants
 
 def vars_for_all_templates(self):
     if self.round_number > 1:
-        previous_precs = [models.get_prec(p) for p in self.player.in_previous_rounds()]
+        previous_precs = [p.get_prec() for p in self.player.in_previous_rounds()]
         return {'previous_precs': previous_precs}
 
 

@@ -14,26 +14,7 @@ import collections
 PRec = collections.namedtuple('PRec', 'round_number expected_price participation_rate ego_participation payoff price')
 
 
-def get_prec(p):
-    if isinstance(p, Player):
-        if p.round_number == 1:
-            expected_price = p.expected_price1
-        else:
-            expected_price = p.in_round(p.round_number - 1).expected_price
-        if p.group.total_participation is not None:
-            participation_rate="{0:.0f}%".format(p.group.total_participation * 100)
-        else:
-            participation_rate= None
-        record = PRec(round_number=p.round_number,
-                      expected_price=expected_price,
-                      price=p.group.price,
-                      participation_rate=participation_rate,
-                      ego_participation=p.participation,
-                      payoff=p.payoff,
-                      )
-        return record
-    else:
-        raise Exception('call it only with Player object')
+
 
 
 class Constants(BaseConstants):
@@ -59,12 +40,12 @@ class Group(BaseGroup):
 
     def price_calculate(self):
         players = self.get_players()
-        self.average_expectations = sum([p.expected_price for p in players]) / Constants.players_per_group
+        self.average_expectations = sum([p.previous_expected()for p in players]) / Constants.players_per_group
         self.total_participation = sum([p.participation for p in players]) / Constants.players_per_group
         adjustment_term = Constants.A * (1 / self.total_participation - 1) if self.total_participation > 0 else 0
         self.price = round((1 / Constants.R) * (self.average_expectations + Constants.mu - adjustment_term), 2)
         for p in players:
-            p.payoff = max(self.price - p.expected_price, 0)
+            p.payoff = max(self.price - p.previous_expected(), 0)
 
 
 class Player(BasePlayer):
@@ -74,3 +55,25 @@ class Player(BasePlayer):
                                                   doc='expected price for round 1',
                                                   verbose_name='Predict the price in this round')
     participation = models.BooleanField(choices=[(False, 'No'), (True, 'Yes')], widget=widgets.RadioSelect)
+
+    def previous_expected(self):
+        if self.round_number == 1:
+            expected_price = self.expected_price1
+        else:
+            expected_price = self.in_round(p.round_number - 1).expected_price
+        return expected_price
+
+    def get_prec(self):
+        if self.group.total_participation is not None:
+            participation_rate = "{0:.0f}%".format(self.group.total_participation * 100)
+        else:
+            participation_rate = None
+        record = PRec(round_number=self.round_number,
+                      expected_price=self.previous_expected(),
+                      price=self.group.price,
+                      participation_rate=participation_rate,
+                      ego_participation=self.participation,
+                      payoff=self.payoff,
+                      )
+        return record
+
