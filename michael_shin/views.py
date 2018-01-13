@@ -12,7 +12,6 @@ def vars_for_all_templates(self):
 
 class Introduction(Page):
     def is_displayed(self):
-        print(models.get_prec(self.player))
         return self.round_number == 1
 
 
