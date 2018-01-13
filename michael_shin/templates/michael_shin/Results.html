@@ -6,7 +6,7 @@
 {% block content %}
     {%  include 'michael_shin/result_table.html' %}
 <p>
-    You predicted {{ player.expected_price }}.
+    You predicted {{ player.previous_expected }}.
     The actual price is {{ group.price }}.
     Your payoff is {{ player.payoff }}
     {{ subsession.series }}
