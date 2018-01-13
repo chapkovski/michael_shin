@@ -1,0 +1,26 @@
+<table class="table table-hover table-striped table-responsive">
+    <thead>
+    <tr>
+        <th>Round</th>
+        <th>Expected price</th>
+        <th>Price</th>
+        <th>Participation rate</th>
+        <th>You participated</th>
+        <th>Your payoff</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for i in previous_precs %}
+        <tr>
+            <td>{{ i.round_number }}</td>
+            <td>{{ i.expected_price }}</td>
+            <td>{{ i.price }}</td>
+            <td>{{ i.participation_rate }}</td>
+            <td>{{ i.ego_participation|yesno:'Yes, No' }}</td>
+            <td>{{ i.payoff }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+
+</table>
+

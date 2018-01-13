@@ -1,0 +1,16 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block title %} Forecast Price {% endblock %}
+
+{% block content %}
+    {%  include 'michael_shin/result_table.html' %}
+    {{ form }}
+    {% next_button %}
+
+
+{% endblock %}
+
+{% block styles %}
+
+{% endblock %}

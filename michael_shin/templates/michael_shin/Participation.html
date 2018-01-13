@@ -1,0 +1,25 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block title %} Participation {% endblock %}
+
+{% block content %}
+
+    {%  include 'michael_shin/result_table.html' %}
+    {% formfield player.participation label="Do you want to participate" %}
+
+    {% next_button %}
+
+
+{% endblock %}
+
+{% block styles %}
+
+    <!-- define a style -->
+    <style type="text/css">
+    .floatLeft { width: 50%; float: left; }
+    .floatRight {width: 50%; float: right; }
+    .container { overflow: hidden; }
+    </style>
+
+{% endblock %}

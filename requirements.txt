@@ -1,0 +1,9 @@
+# this is for Heroku and other servers.
+# Locally, you should install requirements_base.txt
+otree-core[mturk]>=1.4.31
+Django==1.8.8 # for heroku, needs to be explicitly in requirements file
+psycopg2>=2.5.1
+otree-custom-export>=0.1.7
+# django-widget-tweaks==1.4.1
+# django-datetime-widget==0.9.3
+# -r requirements_server.txt

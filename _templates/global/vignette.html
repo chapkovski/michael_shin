@@ -1,0 +1,22 @@
+{% extends "otree/BaseAdmin.html" %}
+
+{% load crispy_forms_tags %}
+{% block title %}
+    Настройка
+{% endblock %}
+
+{% block content %}
+
+    <form action="" method="post">{% csrf_token %}
+        {% crispy form %}
+
+    </form>
+{% endblock %}
+
+{% block internal_styles %}
+    {{ block.super }}
+    <style>
+        .filkinbtn {
+            margin-top: 15px;
+    </style>
+{% endblock %}

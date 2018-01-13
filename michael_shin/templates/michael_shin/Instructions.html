@@ -1,0 +1,21 @@
+{% load otree staticfiles %}
+
+<div class="instructions well well-lg">
+
+    <h3 class="panel-sub-heading">
+        Instructions
+    </h3>
+
+    <p>
+        This is a forecasting game with
+        {{ Constants.players_per_group }} players per group,
+        a per period dividend of {{ Constants.mu }}, and an
+        interest rate of {{ Constants.R }}. You are an advisor
+        to a mutual fund. The fund wants to know what the price
+        of the stock will be next period. You will guess a price
+        and tell them. You will be rewarded for your accuracy.
+    </p>
+
+    <p>This game will be played for {{ Constants.num_rounds }} rounds.</p>
+
+</div>
