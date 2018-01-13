@@ -14,9 +14,6 @@ import collections
 PRec = collections.namedtuple('PRec', 'round_number expected_price participation_rate ego_participation payoff price')
 
 
-
-
-
 class Constants(BaseConstants):
     name_in_url = 'ltf_sample'
     players_per_group = 2
@@ -33,14 +30,18 @@ class Constants(BaseConstants):
 class Subsession(BaseSubsession):
     ...
 
+
 class Group(BaseGroup):
     average_expectations = models.FloatField()
     price = models.FloatField()
     total_participation = models.FloatField()
 
+    def get_old_prices(self):
+        ...
+
     def price_calculate(self):
         players = self.get_players()
-        self.average_expectations = sum([p.previous_expected()for p in players]) / Constants.players_per_group
+        self.average_expectations = sum([p.previous_expected() for p in players]) / Constants.players_per_group
         self.total_participation = sum([p.participation for p in players]) / Constants.players_per_group
         adjustment_term = Constants.A * (1 / self.total_participation - 1) if self.total_participation > 0 else 0
         self.price = round((1 / Constants.R) * (self.average_expectations + Constants.mu - adjustment_term), 2)
@@ -55,6 +56,9 @@ class Player(BasePlayer):
                                                   doc='expected price for round 1',
                                                   verbose_name='Predict the price in this round')
     participation = models.BooleanField(choices=[(False, 'No'), (True, 'Yes')], widget=widgets.RadioSelect)
+
+    def get_old_predictions(self):
+        ...
 
     def previous_expected(self):
         if self.round_number == 1:
@@ -76,4 +80,3 @@ class Player(BasePlayer):
                       payoff=self.payoff,
                       )
         return record
-

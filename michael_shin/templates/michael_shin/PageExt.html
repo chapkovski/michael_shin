@@ -1,0 +1,19 @@
+{% extends "global/Page.html" %}
+{% load staticfiles otree %}
+
+{% block title %} Forecast Price {% endblock %}
+
+{% block content %}
+    {% if view.round_number > 1 %}
+        {% include 'michael_shin/charts.html' %}
+        {% include 'michael_shin/result_table.html' %}
+    {% endif %}
+
+{% block inner_content %}
+{% endblock %}
+
+{% endblock %}
+
+{% block styles %}
+
+{% endblock %}

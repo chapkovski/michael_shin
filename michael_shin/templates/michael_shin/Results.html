@@ -1,17 +1,18 @@
-{% extends "global/Page.html" %}
+{% extends "michael_shin/PageExt.html" %}
 {% load staticfiles otree %}
 
-{% block title %} Results {% endblock %}
 
-{% block content %}
-    {%  include 'michael_shin/result_table.html' %}
-<p>
-    You predicted {{ player.previous_expected }}.
-    The actual price is {{ group.price }}.
-    Your payoff is {{ player.payoff }}
-    {{ subsession.series }}
-</p>
+{% block title %} Results  - round {{ view.round_number }}{% endblock %}
 
-{% next_button %}
+{% block inner_content %}
+
+    <p>
+        You predicted {{ player.previous_expected }}.
+        The actual price is {{ group.price }}.
+        Your payoff is {{ player.payoff }}
+        {{ subsession.series }}
+    </p>
+
+    {% next_button %}
 
 {% endblock %}

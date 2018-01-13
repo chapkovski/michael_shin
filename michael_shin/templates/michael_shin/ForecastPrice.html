@@ -1,16 +1,11 @@
-{% extends "global/Page.html" %}
+{% extends "michael_shin/PageExt.html" %}
 {% load staticfiles otree %}
 
-{% block title %} Forecast Price {% endblock %}
+{% block title %} Forecast Price  - round {{ view.round_number }}{% endblock %}
 
-{% block content %}
-    {%  include 'michael_shin/result_table.html' %}
+{% block inner_content %}
     {{ form }}
     {% next_button %}
 
-
-{% endblock %}
-
-{% block styles %}
 
 {% endblock %}
