@@ -50,13 +50,7 @@ class Constants(BaseConstants):
 
 
 class Subsession(BaseSubsession):
-    unlocked = models.BooleanField(initial=True)
-
-    def creating_session(self):
-        if self.round_number == 1:
-            for p in self.session.get_participants():
-                p.vars['forecast'] = []
-
+    ...
 
 class Group(BaseGroup):
     average_expectations = models.FloatField()
