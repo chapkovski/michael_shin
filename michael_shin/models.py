@@ -60,7 +60,7 @@ class Player(BasePlayer):
         if self.round_number == 1:
             expected_price = self.expected_price1
         else:
-            expected_price = self.in_round(p.round_number - 1).expected_price
+            expected_price = self.in_round(self.round_number - 1).expected_price
         return expected_price
 
     def get_prec(self):
