@@ -5,15 +5,29 @@
 
 {% block content %}
     {% if view.round_number > 1 %}
-        {% include 'michael_shin/charts.html' %}
-        {% include 'michael_shin/result_table.html' %}
+
+   
+                <div class="col-md-8">
+                    {% include 'michael_shin/charts.html' %}
+                </div>
+
+
+                <div class="col-md-4 scrtable">
+                    {% include 'michael_shin/result_table.html' %}
+                </div>
+
     {% endif %}
 
-{% block inner_content %}
-{% endblock %}
+    {% block inner_content %}
+    {% endblock %}
 
 {% endblock %}
 
 {% block styles %}
-
+    <style>
+.scrtable{
+    height:400px;
+overflow: scroll;
+    }
+    </style>
 {% endblock %}

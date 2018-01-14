@@ -1,67 +1,68 @@
- <script src="https://code.highcharts.com/highcharts.js"></script>
- <script>$(function() {
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script>$(function () {
 
-Highcharts.chart('container', {
+    Highcharts.chart('container', {
 
-    title: {
-        text: 'Prices and your predictions in previous rounds'
-    },
-
- credits: {
-      enabled: false
-  },
-
-    yAxis: {
         title: {
-            text: 'Price level'
-        }
-    },
-    legend: {
-        layout: 'vertical',
-        align: 'right',
-        verticalAlign: 'middle'
-    },
-
-       xAxis: {
-         title: {
-            text: 'Round'
+            text: 'Prices and your predictions in previous rounds'
         },
-        categories: {{ rounds }}
-    },
 
-    series: [{
-        name: 'Price',
-        data: {{ prices_series }}
-    }, {
-        name: 'Your expectation',
-        data: {{ expected_prices_series }}
-    }, ],
+        credits: {
+            enabled: false
+        },
 
-    responsive: {
-        rules: [{
-            condition: {
-                maxWidth: 500
-            },
-            chartOptions: {
-                legend: {
-                    layout: 'horizontal',
-                    align: 'center',
-                    verticalAlign: 'bottom'
-                }
+        yAxis: {
+            title: {
+                text: 'Price level'
             }
-        }]
-    }
+        },
+        legend: {
+            layout: 'horizontal',
+            align: 'center',
+            verticalAlign: 'bottom'
+        },
 
+        xAxis: {
+            title: {
+                text: 'Round'
+            },
+            categories: {{ rounds }}
+        },
+
+        series: [{
+            name: 'Price',
+            data: {{ prices_series }}
+        }, {
+            name: 'Your expectation',
+            data: {{ expected_prices_series }}
+        },],
+
+        responsive: {
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom'
+                    }
+                }
+            }]
+        }
+
+    });
 });
- });
- </script>
- <style>
-     #container {
-	min-width: 310px;
-	max-width: 800px;
-	height: 400px;
-	margin: 0 auto
-}
- </style>
+</script>
+<style>
+    #container {
+        min-width: 210px;
+        max-width: 500px;
+        height: 400px;
+        margin: 0 auto
+    }
+</style>
 
- <div id="container"></div>
+    <div id="container"></div>
+
