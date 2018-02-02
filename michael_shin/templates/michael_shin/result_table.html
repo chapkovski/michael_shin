@@ -1,26 +1,74 @@
-<table class="table table-hover table-striped table-responsive">
-    <thead>
-    <tr>
-        <th>Round</th>
-        <th>Expected price</th>
-        <th>Price</th>
-        <th>Participation rate</th>
-        <th>You participated</th>
-        <th>Your payoff</th>
-    </tr>
-    </thead>
-    <tbody>
-    {% for i in previous_precs %}
+<div>
+    <table class="table table-hover table-striped table-responsive table-fixed">
+        <thead>
         <tr>
-            <td>{{ i.round_number }}</td>
-            <td>{{ i.expected_price }}</td>
-            <td>{{ i.price }}</td>
-            <td>{{ i.participation_rate }}</td>
-            <td>{{ i.ego_participation|yesno:'Yes, No' }}</td>
-            <td>{{ i.temp_payoff }}</td>
+            <th>Round</th>
+            <th>Expected price</th>
+            <th>Price</th>
+            <th class="wide">Participation rate</th>
+            <th class="wide">You participated</th>
+            <th>Your payoff</th>
         </tr>
-    {% endfor %}
-    </tbody>
+        </thead>
+        <tbody>
+        {% for i in previous_precs %}
+            <tr>
+                <td>{{ i.round_number }}</td>
+                <td>{{ i.expected_price }}</td>
+                <td>{{ i.price }}</td>
+                <td>{{ i.participation_rate }}</td>
+                <td>{{ i.ego_participation|yesno:'Yes, No' }}</td>
+                <td>{{ i.temp_payoff }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
 
-</table>
+    </table>
+</div>
+<style>
+            table {
+            width: 100%;
+                height:100%;
+        }
 
+        thead, tbody, tr, td, th { display: block; }
+
+        tr:after {
+            content: ' ';
+            display: block;
+            visibility: hidden;
+            clear: both;
+        }
+
+        thead th {
+            height: 60px;
+
+            /*text-align: left;*/
+        }
+
+        tbody {
+            height: 280px;
+            overflow-y: auto;
+        }
+
+        thead {
+            /* fallback */
+        }
+
+
+        tbody td, thead th {
+            width: 15.2%;
+            min-width: 70px!important;
+            float: left;
+            font-size:80%;
+
+        }
+       tbody td.wide, thead th.wide {
+            width: 15.2%;
+            min-width: 80px!important;
+            float: left;
+            font-size:80%;
+
+        }
+
+</style>

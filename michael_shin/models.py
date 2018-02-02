@@ -17,21 +17,21 @@ PRec = collections.namedtuple('PRec', 'round_number expected_price participation
 class Constants(BaseConstants):
     name_in_url = 'ltf_sample'
     players_per_group = 2
-    num_rounds = 8
+    num_rounds = 2
 
     R = 1.05  # Interest Rate
     mu = 3  # Dividends
     A = 4  # Supply
     max_price = 200  # max value for expected price
     paying_round = 1
+    max_rounds_in_table = 5
     instructions_template = 'michael_shin/Instructions.html'
 
 
 class Subsession(BaseSubsession):
     def creating_session(self):
-        if self.round_number == 1:
-            for p in self.get_players():
-                p.paying_round = self.session.config.get('paying_round', Constants.paying_round)
+        for p in self.get_players():
+            p.paying_round = self.session.config.get('paying_round', Constants.paying_round)
 
 
 class Group(BaseGroup):

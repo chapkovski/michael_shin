@@ -8,6 +8,8 @@ import json
 def vars_for_all_templates(self):
     if self.round_number > 1:
         previous_precs = [p.get_prec() for p in self.player.in_previous_rounds()]
+        # print("AAAAA", self.session.config.get('max_rounds_in_table'), Constants.max_rounds_in_table)
+        previous_precs = previous_precs[:self.session.config.get('max_rounds_in_table', Constants.max_rounds_in_table)]
         nones = [None for _ in range(Constants.num_rounds - len(previous_precs))]
         prices = json.dumps([i.price for i in previous_precs] + nones)
         expected_prices = json.dumps([i.expected_price for i in previous_precs] + nones)
@@ -40,7 +42,7 @@ class Participation(Page):
 class ResultsWaitPage(WaitPage):
     def after_all_players_arrive(self):
         self.group.price_calculate()
-        if self.round_number==models.Constants.num_rounds:
+        if self.round_number == Constants.num_rounds:
             for p in self.group.get_players():
                 p.set_payoff()
 
