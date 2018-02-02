@@ -40,6 +40,9 @@ class Participation(Page):
 class ResultsWaitPage(WaitPage):
     def after_all_players_arrive(self):
         self.group.price_calculate()
+        if self.round_number==models.Constants.num_rounds:
+            for p in self.group.get_players():
+                p.set_payoff()
 
 
 class Results(Page):

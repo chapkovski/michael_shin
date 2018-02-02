@@ -106,13 +106,9 @@ SESSION_CONFIGS = [
         'display_name': 'shin',
         'num_demo_participants': 2,
         'app_sequence': ['michael_shin'],
+        'paying_round':1,
     },
-    # {
-    #     'name': 'testing_utils',
-    #     'display_name': 'Testing Utils',
-    #     'num_demo_participants': 2,
-    #     'app_sequence': ['testing_utils'],
-    # }
+
 
 ]
 

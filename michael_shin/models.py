@@ -23,12 +23,15 @@ class Constants(BaseConstants):
     mu = 3  # Dividends
     A = 4  # Supply
     max_price = 200  # max value for expected price
-
+    paying_round = 1
     instructions_template = 'michael_shin/Instructions.html'
 
 
 class Subsession(BaseSubsession):
-    ...
+    def creating_session(self):
+        if self.round_number == 1:
+            for p in self.get_players():
+                p.paying_round = self.session.config.get('paying_round', Constants.paying_round)
 
 
 class Group(BaseGroup):
@@ -46,10 +49,13 @@ class Group(BaseGroup):
         adjustment_term = Constants.A * (1 / self.total_participation - 1) if self.total_participation > 0 else 0
         self.price = round((1 / Constants.R) * (self.average_expectations + Constants.mu - adjustment_term), 2)
         for p in players:
-            p.payoff = max(self.price - p.previous_expected(), 0)
+            p.temp_payoff = max(self.price - p.previous_expected(), 0)
 
 
 class Player(BasePlayer):
+    temp_payoff = models.CurrencyField(
+        doc='field for storing temporary payoff; a final one defned by paying round field')
+    paying_round = models.IntegerField(doc='round to pay')
     expected_price = models.PositiveIntegerField(max=Constants.max_price,
                                                  verbose_name='Predict the price in the next round')
     expected_price1 = models.PositiveIntegerField(max=Constants.max_price,
@@ -77,6 +83,9 @@ class Player(BasePlayer):
                       price=self.group.price,
                       participation_rate=participation_rate,
                       ego_participation=self.participation,
-                      payoff=self.payoff,
+                      payoff=self.temp_payoff,
                       )
         return record
+
+    def set_payoff(self):
+        self.payoff = self.in_round(self.paying_round).temp_payoff
