@@ -57,7 +57,7 @@ class Group(BaseGroup):
         r = Constants.R
         a = Constants.A
         players = self.get_players()
-        self.average_expectations = sum([p.previous_expected() for p in players]) / Constants.players_per_group
+        self.average_expectations = sum([p.e_price_now for p in players]) / Constants.players_per_group
         self.total_participation = sum([p.participation for p in players]) / Constants.players_per_group
         adjustment_term = a * (1 / self.total_participation - 1) if self.total_participation > 0 else 0
         self.price = round((1 / r) * (self.average_expectations + mu - adjustment_term), 2)
