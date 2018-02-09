@@ -27,7 +27,7 @@ class Constants(BaseConstants):
     mu = 3  # Dividends
     A = 4  # Supply
     d = 0  # the entry payoff for non particpants
-    c = 1  # constant c for calculating payoff for a forecast
+    c = 100  # constant c for calculating payoff for a forecast
     max_price = 200  # max value for expected price
     paying_round = 1
     max_rounds_in_table = 5
@@ -59,7 +59,7 @@ class Group(BaseGroup):
         players = self.get_players()
         self.average_expectations = sum([p.e_price_now for p in players]) / Constants.players_per_group
         self.total_participation = sum([p.participation for p in players]) / Constants.players_per_group
-        adjustment_term = a * (1 / self.total_participation - 1) if self.total_participation > 0 else 0
+        adjustment_term = a / self.total_participation if self.total_participation > 0 else 0
         self.price = round((1 / r) * (self.average_expectations + mu - adjustment_term), 2)
         for p in players:
             p.set_forecasting_payoff()
@@ -128,13 +128,15 @@ class Player(BasePlayer):
 
     def set_forecasting_payoff(self):
         if self.round_number == 1:
-            return
-        p = self.in_round(self.round_number - 1)
+            p=self
+        else:
+            p = self.in_round(self.round_number - 1)
         e_pt1 = p.e_price_next
         e_pt2 = self.e_price_now
         p_t = self.group.price
         c = Constants.c
         fp = c / (1 + abs(p_t - e_pt1) + abs(p_t - e_pt2))
+        print(fp)
         self.payoff_forecasting = fp
 
     def set_payoff(self):
