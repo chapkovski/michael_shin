@@ -106,8 +106,8 @@ SESSION_CONFIGS = [
         'display_name': 'shin',
         'num_demo_participants': 2,
         'app_sequence': ['michael_shin'],
-        'paying_round':1,
         'max_rounds_in_table':5,
+        'simultaneous_ef_payment': True,
     },
 
 
