@@ -24,13 +24,13 @@ class Introduction(Page):
 
 
 class ForecastPrice(Page):
-    form_model = models.Player
-    form_fields = ['e_price_next', 'e_price_now']
+    form_model = 'player'
+    form_fields = [ 'e_price_now','e_price_next',]
 
 
 
 class Participation(Page):
-    form_model = models.Player
+    form_model = 'player'
     form_fields = ['participation']
 
 

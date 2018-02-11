@@ -21,6 +21,7 @@ PRec = collections.namedtuple('PRec', 'round_number expected_price participation
 class Constants(BaseConstants):
     name_in_url = 'ltf_sample'
     players_per_group = 2
+    assert players_per_group > 1 and players_per_group is not None, 'Number of players should be at least 2'
     num_rounds = 2
 
     R = 1.05  # Interest Rate
@@ -57,13 +58,14 @@ class Group(BaseGroup):
         r = Constants.R
         a = Constants.A
         players = self.get_players()
-        self.average_expectations = sum([p.e_price_now for p in players]) / Constants.players_per_group
+        self.average_expectations = sum([p.e_price_next for p in players]) / Constants.players_per_group
         self.total_participation = sum([p.participation for p in players]) / Constants.players_per_group
         adjustment_term = a / self.total_participation if self.total_participation > 0 else 0
         self.price = round((1 / r) * (self.average_expectations + mu - adjustment_term), 2)
         for p in players:
             p.set_forecasting_payoff()
             p.set_entry_payoff()
+            p.temp_payoff = p.payoff_forecasting+p.payoff_entry
 
     def set_payoffs(self):
         # the following condition is  a bit overcontrolling but just in case we call them before the final round:
@@ -109,6 +111,7 @@ class Player(BasePlayer):
                       )
         return record
 
+    # calculation of payoff for the participation in the previous round:
     def set_entry_payoff(self):
         if self.round_number == 1:
             return
@@ -127,16 +130,15 @@ class Player(BasePlayer):
         self.payoff_entry = ep
 
     def set_forecasting_payoff(self):
-        if self.round_number == 1:
-            p=self
-        else:
-            p = self.in_round(self.round_number - 1)
-        e_pt1 = p.e_price_next
-        e_pt2 = self.e_price_now
-        p_t = self.group.price
         c = Constants.c
+        p_t = self.group.price
+        if self.round_number > 1:
+            p = self.in_round(self.round_number - 1)
+            e_pt1 = p.e_price_next
+        else:
+            e_pt1 = p_t
+        e_pt2 = self.e_price_now
         fp = c / (1 + abs(p_t - e_pt1) + abs(p_t - e_pt2))
-        print(fp)
         self.payoff_forecasting = fp
 
     def set_payoff(self):

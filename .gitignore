@@ -12,3 +12,4 @@ _static_root/
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+__temp_migrations/*
