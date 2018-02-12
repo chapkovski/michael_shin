@@ -25,13 +25,26 @@ class Introduction(Page):
 
 class ForecastPrice(Page):
     form_model = 'player'
-    form_fields = [ 'e_price_now','e_price_next',]
+    form_fields = ['e_price_now', 'e_price_next', ]
 
+    def vars_for_template(self):
+        label = "Predict the price in this round"
+        addendum = " (your last prediction for this round was {prev})?".format(
+            prev=self.player.previous_expected()) if self.round_number > 1 else ''
+        label += addendum
+        return {'label': label}
 
 
 class Participation(Page):
     form_model = 'player'
     form_fields = ['participation']
+
+    def vars_for_template(self):
+        label = """
+        Do you want to participate this period? (Your cost of participating is {cost}. 
+        Your prediction for this round is {now_price} and next round is {price_next}).
+        """.format(cost=self.player.cost, now_price=self.player.e_price_now, price_next=self.player.e_price_next)
+        return {'label': label}
 
 
 class ResultsWaitPage(WaitPage):
@@ -45,10 +58,25 @@ class Results(Page):
     pass
 
 
+class FinalResults(Page):
+    def is_displayed(self):
+        return self.round_number == Constants.num_rounds
+
+    def vars_for_template(self):
+        ef = self.session.config.get('simultaneous_ef_payment', Constants.simultaneous_ef_payment)
+        f_payoff = self.player.in_round(self.player.paying_round_f).payoff_forecasting
+        e_payoff = + self.player.in_round(self.player.paying_round_e).payoff_entry
+
+        return {'ef': ef,
+                'f_payoff': f_payoff,
+                'e_payoff': e_payoff, }
+
+
 page_sequence = [
     Introduction,
     ForecastPrice,
     Participation,
     ResultsWaitPage,
-    Results
+    Results,
+    FinalResults
 ]

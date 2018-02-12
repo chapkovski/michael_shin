@@ -4,7 +4,10 @@
 {% block title %} Forecast Price  - round {{ view.round_number }}{% endblock %}
 
 {% block inner_content %}
-    {{ form }}
+    {% formfield player.e_price_now label=label %}
+
+    {% formfield player.e_price_next  %}
+
     {% next_button %}
 
 

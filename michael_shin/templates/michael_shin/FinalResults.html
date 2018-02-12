@@ -1,0 +1,20 @@
+{% extends "michael_shin/PageExt.html" %}
+{% load staticfiles otree %}
+
+
+{% block title %}Final results{% endblock %}
+
+{% block content %}
+
+    <p>We picked {% if ef %}
+        round {{ player.paying_round_e }} {% else %}
+        rounds {{ player.paying_round_f }}  and {{ player.paying_round_e }}
+    {% endif %}
+        for payoff with the values {{ f_payoff }}  for
+        forecasting and {{ e_payoff }}  for participation in that round. </p>
+
+    <p> Thank you for participating.</p>
+
+    {% next_button %}
+
+{% endblock %}

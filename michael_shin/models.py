@@ -65,7 +65,7 @@ class Group(BaseGroup):
         for p in players:
             p.set_forecasting_payoff()
             p.set_entry_payoff()
-            p.temp_payoff = p.payoff_forecasting+p.payoff_entry
+            p.temp_payoff = p.payoff_forecasting + p.payoff_entry
 
     def set_payoffs(self):
         # the following condition is  a bit overcontrolling but just in case we call them before the final round:
@@ -142,14 +142,15 @@ class Player(BasePlayer):
         self.payoff_forecasting = fp
 
     def set_payoff(self):
-        # we set final payoff only in the last round!
+        # we set final payoff only in the last round! (It's a bit absurd that we check for this condition
+        # the THIRD time in a row but it's better be safe)
         if self.round_number == Constants.num_rounds:
             same_ef_round = self.session.config.get('simultaneous_ef_payment', Constants.simultaneous_ef_payment)
-            self.paying_round_f = random.randint(1, Constants.num_rounds)
+
             if same_ef_round:
-                self.paying_round_e = self.paying_round_f
+                self.paying_round_e = self.paying_round_f = random.randint(1, Constants.num_rounds)
             else:
-                self.paying_round_e = random.randint(1, Constants.num_rounds)
+                self.paying_round_e, self.paying_round_f = random.sample(range(1, Constants.num_rounds + 1))
             self.payoff = self.in_round(self.paying_round_f).payoff_forecasting + self.in_round(
                 self.paying_round_e).payoff_entry
         else:
