@@ -70,7 +70,7 @@ class Group(BaseGroup):
         for p in players:
             p.set_forecasting_payoff()
             p.set_entry_payoff()
-            p.temp_payoff = p.payoff_forecasting + (p.payoff_entry  or 0)
+            p.temp_payoff = p.payoff_forecasting + (p.payoff_entry or 0)
 
     def set_payoffs(self):
         # the following condition is  a bit overcontrolling but just in case we call them before the final round:
@@ -157,7 +157,7 @@ class Player(BasePlayer):
             if same_ef_round:
                 self.paying_round_e = self.paying_round_f = random.randint(1, Constants.num_rounds)
             else:
-                self.paying_round_e, self.paying_round_f = random.sample(range(1, Constants.num_rounds + 1))
+                self.paying_round_e, self.paying_round_f = random.sample(range(1, Constants.num_rounds + 1), 2)
             self.payoff = self.in_round(self.paying_round_f).payoff_forecasting + self.in_round(
                 self.paying_round_e).payoff_entry
         else:
