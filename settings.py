@@ -107,14 +107,14 @@ SESSION_CONFIGS = [
         'display_name': 'shin',
         'num_demo_participants': 2,
         'app_sequence': ['michael_shin'],
-        'max_rounds_in_table':5,
+        'max_rounds_in_table': 5,
         'simultaneous_ef_payment': True,
-    },
+        'participation_stage': True,
 
+    },
 
 ]
 
 # anything you put after the below line will override
 # oTree's default settings. Use with caution.
 otree.settings.augment_settings(globals())
-

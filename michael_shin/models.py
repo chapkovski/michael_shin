@@ -38,10 +38,15 @@ class Constants(BaseConstants):
     simultaneous_ef_payment = True
     ub = 3  # upper bound for costs in group
     cost_step = ub / (players_per_group - 1 or 1)
+    participation_stage = True
 
 
 class Subsession(BaseSubsession):
+    participation_stage = models.BooleanField(doc='true (default) if a game has a participation stage')
+
     def creating_session(self):
+        if self.round_number == 1:
+            self.participation_stage = self.session.config.get('participation_stage', Constants.participation_stage)
         k = Constants.cost_step
         for g in self.get_groups():
             for i, p in enumerate(g.get_players()):
@@ -59,13 +64,13 @@ class Group(BaseGroup):
         a = Constants.A
         players = self.get_players()
         self.average_expectations = sum([p.e_price_next for p in players]) / Constants.players_per_group
-        self.total_participation = sum([p.participation for p in players]) / Constants.players_per_group
+        self.total_participation = sum([p.participation or 0 for p in players]) / Constants.players_per_group
         adjustment_term = a / self.total_participation if self.total_participation > 0 else 0
         self.price = round((1 / r) * (self.average_expectations + mu - adjustment_term), 2)
         for p in players:
             p.set_forecasting_payoff()
             p.set_entry_payoff()
-            p.temp_payoff = p.payoff_forecasting + p.payoff_entry
+            p.temp_payoff = p.payoff_forecasting + (p.payoff_entry  or 0)
 
     def set_payoffs(self):
         # the following condition is  a bit overcontrolling but just in case we call them before the final round:
@@ -114,7 +119,7 @@ class Player(BasePlayer):
     # calculation of payoff for the participation in the previous round:
     def set_entry_payoff(self):
         if self.round_number == 1:
-            return
+            return 0
         p = self.in_round(self.round_number - 1)
         price_t_2 = self.group.price
         price_t = p.group.price
@@ -123,7 +128,9 @@ class Player(BasePlayer):
         e = p.participation
         d = Constants.d
         k = self.cost
-        if e:
+        if e is None:
+            return 0
+        if e == 0:
             ep = e * (price_t_2 + mu - r * price_t + d - k)
         else:
             ep = d

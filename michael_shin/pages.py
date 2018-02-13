@@ -39,6 +39,9 @@ class Participation(Page):
     form_model = 'player'
     form_fields = ['participation']
 
+    def is_displayed(self):
+        return self.subsession.participation_stage
+
     def vars_for_template(self):
         label = """
         Do you want to participate this period? (Your cost of participating is {cost}. 

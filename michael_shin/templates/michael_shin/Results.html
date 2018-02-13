@@ -10,7 +10,9 @@
     <p>You predicted {{ player.e_price_now }}.</p>
     <p>The actual price is {{ group.price }}.</p>
     <p>Your payoff for forecasting is {{ player.payoff_forecasting }}</p>
-    <p>Your cost for entering the market is: {{ player.cost }}</p>
+    {% if subsession.participation_stage %}
+        <p>Your cost for entering the market is: {{ player.cost }}</p>
+    {% endif %}
     {% if view.round_number != 1 %}
         <p>Your payoff for entry in the previous round is {{ player.payoff_entry }} </p>
     {% endif %}

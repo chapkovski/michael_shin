@@ -5,8 +5,11 @@
             <th>Round</th>
             <th>Expected price</th>
             <th>Price</th>
-            <th class="wide">Participation rate</th>
-            <th class="wide">You participated</th>
+            {% if subsession.participation_stage %}
+                <th class="wide">Participation rate</th>
+
+                <th class="wide">You participated</th>
+            {% endif %}
             <th>Your payoff</th>
         </tr>
         </thead>
@@ -16,9 +19,12 @@
                 <td>{{ i.round_number }}</td>
                 <td>{{ i.expected_price }}</td>
                 <td>{{ i.price }}</td>
-                <td>{{ i.participation_rate }}</td>
-                <td>{{ i.ego_participation|yesno:'Yes, No' }}</td>
-                <td>{{ i.temp_payoff }}</td>
+                {% if subsession.participation_stage %}
+                    <td>{{ i.participation_rate }}</td>
+
+                    <td>{{ i.ego_participation|yesno:'Yes, No' }}</td>
+                {% endif %}
+                <td>{{ i.payoff }}</td>
             </tr>
         {% endfor %}
         </tbody>
@@ -26,49 +32,51 @@
     </table>
 </div>
 <style>
-            table {
-            width: 100%;
-                height:100%;
-        }
+    table {
+        width: 100%;
+        height: 100%;
+    }
 
-        thead, tbody, tr, td, th { display: block; }
+    thead, tbody, tr, td, th {
+        display: block;
+    }
 
-        tr:after {
-            content: ' ';
-            display: block;
-            visibility: hidden;
-            clear: both;
-        }
+    tr:after {
+        content: ' ';
+        display: block;
+        visibility: hidden;
+        clear: both;
+    }
 
-        thead th {
-            height: 60px;
+    thead th {
+        height: 60px;
 
-            /*text-align: left;*/
-        }
+        /*text-align: left;*/
+    }
 
-        tbody {
-            height: 280px;
-            overflow-y: auto;
-        }
+    tbody {
+        height: 280px;
+        overflow-y: auto;
+    }
 
-        thead {
-            /* fallback */
-        }
+    thead {
+        /* fallback */
+    }
 
+    tbody td, thead th {
+        width: 15.2%;
+        min-width: 70px !important;
+        float: left;
+        font-size: 60%;
 
-        tbody td, thead th {
-            width: 15.2%;
-            min-width: 70px!important;
-            float: left;
-            font-size:60%;
+    }
 
-        }
-{#       tbody td.wide, thead th.wide {#}
-{#            width: 15.2%;#}
-{#            min-width: 80px!important;#}
-{#            float: left;#}
-{#            font-size:80%;#}
-{##}
-{#        }#}
+    {#       tbody td.wide, thead th.wide {#}
+    {#            width: 15.2%;#}
+    {#            min-width: 80px!important;#}
+    {#            float: left;#}
+    {#            font-size:80%;#}
+    {##}
+    {#        }#}
 
 </style>

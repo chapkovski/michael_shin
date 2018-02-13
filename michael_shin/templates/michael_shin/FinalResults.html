@@ -2,16 +2,17 @@
 {% load staticfiles otree %}
 
 
-{% block title %}Final results{% endblock %}
+{% block title %}{% endblock %}
 
-{% block content %}
+{% block inner_content %}
 
-    <p>We picked {% if ef %}
+    <p>We picked {% if ef or not  subsession.participation_stage %}
         round {{ player.paying_round_e }} {% else %}
         rounds {{ player.paying_round_f }}  and {{ player.paying_round_e }}
     {% endif %}
-        for payoff with the values {{ f_payoff }}  for
-        forecasting and {{ e_payoff }}  for participation in that round. </p>
+        for payoff with the values {{ f_payoff }} for
+        forecasting {% if subsession.participation_stage %} and {{ e_payoff }} points for participation  {% endif %}in
+        that round. </p>
 
     <p> Thank you for participating.</p>
 
