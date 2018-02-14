@@ -8,11 +8,10 @@
 
         <div class="container-fluid">
             <div class="row">
-                <div class="col">
+                <div class= {% if subsession.participation_stage %}"col-sm-6"{% else %}"col-sm-8"{% endif %}>
                     {% include 'michael_shin/charts.html' %}
                 </div>
-                <div class="col scrtable">
-
+                <div class= {% if subsession.participation_stage %}"col-sm-6 scrtable"{% else %}"col-sm-4 scrtable"{% endif %}>
                     {% include 'michael_shin/result_table.html' %}
                 </div>
             </div>
@@ -29,7 +28,7 @@
     <style>
         .scrtable {
             height: 400px;
-            overflow: scroll;
+            overflow-y: auto;
         }
     </style>
 {% endblock %}

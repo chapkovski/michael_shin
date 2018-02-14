@@ -45,8 +45,10 @@ class Subsession(BaseSubsession):
     participation_stage = models.BooleanField(doc='true (default) if a game has a participation stage')
 
     def creating_session(self):
-        if self.round_number == 1:
-            self.participation_stage = self.session.config.get('participation_stage', Constants.participation_stage)
+        for p in self.session.get_participants():
+            print([i.payoff for i in p.michael_shin_player.all()])
+
+        self.participation_stage = self.session.config.get('participation_stage', Constants.participation_stage)
         k = Constants.cost_step
         for g in self.get_groups():
             for i, p in enumerate(g.get_players()):
@@ -87,19 +89,19 @@ class Player(BasePlayer):
     paying_round_f = models.IntegerField(doc='round to pay for forecasting')
     paying_round_e = models.IntegerField(doc='round to pay for entry')
     temp_payoff = models.CurrencyField(initial=0, doc='temporary payoff in round')
-    e_price_next = models.PositiveIntegerField(max=Constants.max_price,
+    e_price_next = models.FloatField(min=0,max=Constants.max_price,
                                                doc='expected price for next round',
                                                verbose_name='Predict the price in the next round')
-    e_price_now = models.PositiveIntegerField(max=Constants.max_price,
+    e_price_now = models.FloatField(min=0,max=Constants.max_price,
                                               doc='expected price for current round',
                                               verbose_name='Predict the price in this round')
     participation = models.BooleanField(choices=[(False, 'No'), (True, 'Yes')], widget=widgets.RadioSelect)
 
     def previous_expected(self):
         if self.round_number == 1:
-            expected_price = self.e_price_now
+            expected_price = round(self.e_price_now, 2)
         else:
-            expected_price = self.in_round(self.round_number - 1).e_price_next
+            expected_price = round(self.in_round(self.round_number - 1).e_price_next,2)
         return expected_price
 
     def get_prec(self):

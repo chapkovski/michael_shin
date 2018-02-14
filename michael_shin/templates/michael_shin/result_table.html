@@ -17,7 +17,7 @@
         {% for i in previous_precs %}
             <tr>
                 <td>{{ i.round_number }}</td>
-                <td>{{ i.expected_price }}</td>
+                <td>{{ i.expected_price|floatformat:2  }}</td>
                 <td>{{ i.price }}</td>
                 {% if subsession.participation_stage %}
                     <td>{{ i.participation_rate }}</td>

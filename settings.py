@@ -113,6 +113,17 @@ SESSION_CONFIGS = [
 
     },
 
+    {
+        'name': 'shin_nopart',
+        'display_name': 'NO participation stage, sim_ef=False',
+        'num_demo_participants': 2,
+        'app_sequence': ['michael_shin'],
+        'max_rounds_in_table': 5,
+        'simultaneous_ef_payment': False,
+        'participation_stage': False,
+
+    },
+
 ]
 
 # anything you put after the below line will override
