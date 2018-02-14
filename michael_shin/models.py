@@ -6,6 +6,7 @@ import random, json
 from otree.models import Participant
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.db import models as djmodels
 
 author = 'Mike Shin, Philipp Chapkovski'
 
@@ -68,7 +69,7 @@ class Group(BaseGroup):
         self.average_expectations = sum([p.e_price_next for p in players]) / Constants.players_per_group
         self.total_participation = sum([p.participation or 0 for p in players]) / Constants.players_per_group
         adjustment_term = a / self.total_participation if self.total_participation > 0 else 0
-        self.price = round((1 / r) * (self.average_expectations + mu - adjustment_term), 2)
+        self.price = round((1 / r) * (float(self.average_expectations) + mu - adjustment_term), 2)
         for p in players:
             p.set_forecasting_payoff()
             p.set_entry_payoff()
@@ -84,24 +85,27 @@ class Group(BaseGroup):
 class Player(BasePlayer):
     cost = models.FloatField(doc='personal cost for entry')
     participant_vars_dump = models.StringField(doc='to store participant vars')
-    payoff_forecasting = models.CurrencyField(initial=0, doc='payoff for forecasting')
-    payoff_entry = models.CurrencyField(initial=0, doc='payoff for entry in the previous round')
+    payoff_forecasting = models.DecimalField(initial=0, doc='payoff for forecasting', decimal_places=2, max_digits=10)
+    payoff_entry = models.DecimalField(initial=0, doc='payoff for entry in the previous round', decimal_places=2,
+                                       max_digits=10)
     paying_round_f = models.IntegerField(doc='round to pay for forecasting')
     paying_round_e = models.IntegerField(doc='round to pay for entry')
-    temp_payoff = models.CurrencyField(initial=0, doc='temporary payoff in round')
-    e_price_next = models.FloatField(min=0,max=Constants.max_price,
-                                               doc='expected price for next round',
-                                               verbose_name='Predict the price in the next round')
-    e_price_now = models.FloatField(min=0,max=Constants.max_price,
-                                              doc='expected price for current round',
-                                              verbose_name='Predict the price in this round')
+    temp_payoff = models.DecimalField(initial=0, doc='temporary payoff in round', decimal_places=2, max_digits=10)
+    e_price_next = models.DecimalField(min=0, max=Constants.max_price,
+                                       doc='expected price for next round',
+                                       verbose_name='Predict the price in the next round',
+                                       decimal_places=2, max_digits=10, )
+    e_price_now = models.DecimalField(min=0, max=Constants.max_price,
+                                      doc='expected price for current round',
+                                      verbose_name='Predict the price in this round',
+                                      decimal_places=2, max_digits=10)
     participation = models.BooleanField(choices=[(False, 'No'), (True, 'Yes')], widget=widgets.RadioSelect)
 
     def previous_expected(self):
         if self.round_number == 1:
             expected_price = round(self.e_price_now, 2)
         else:
-            expected_price = round(self.in_round(self.round_number - 1).e_price_next,2)
+            expected_price = round(self.in_round(self.round_number - 1).e_price_next, 2)
         return expected_price
 
     def get_prec(self):
@@ -143,10 +147,10 @@ class Player(BasePlayer):
         p_t = self.group.price
         if self.round_number > 1:
             p = self.in_round(self.round_number - 1)
-            e_pt1 = p.e_price_next
+            e_pt1 = float(p.e_price_next)
         else:
-            e_pt1 = p_t
-        e_pt2 = self.e_price_now
+            e_pt1 = float(p_t)
+        e_pt2 = float(self.e_price_now)
         fp = c / (1 + abs(p_t - e_pt1) + abs(p_t - e_pt2))
         self.payoff_forecasting = fp
 

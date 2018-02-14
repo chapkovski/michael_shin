@@ -11,7 +11,7 @@ def vars_for_all_templates(self):
         previous_precs = previous_precs[:self.session.config.get('max_rounds_in_table', Constants.max_rounds_in_table)]
         nones = [None for _ in range(Constants.num_rounds - len(previous_precs))]
         prices = json.dumps([i.price for i in previous_precs] + nones)
-        expected_prices = json.dumps([i.expected_price for i in previous_precs] + nones)
+        expected_prices = json.dumps([float(i.expected_price) for i in previous_precs] + nones)
         return {'previous_precs': previous_precs,
                 'rounds': list(range(1, Constants.num_rounds + 1)),
                 'prices_series': prices,
