@@ -159,12 +159,20 @@ class Player(BasePlayer):
         # the THIRD time in a row but it's better be safe)
         if self.round_number == Constants.num_rounds:
             same_ef_round = self.session.config.get('simultaneous_ef_payment', Constants.simultaneous_ef_payment)
-
+            participation_stage = self.subsession.participation_stage
             if same_ef_round:
-                self.paying_round_e = self.paying_round_f = random.randint(1, Constants.num_rounds)
+                self.paying_round_e =self.paying_round_f = random.randint(1, Constants.num_rounds)
+                self.payoff = self.in_round(self.paying_round_f).payoff_forecasting
+                if participation_stage:
+                    self.payoff += self.in_round(self.paying_round_f).payoff_entry
             else:
                 self.paying_round_e, self.paying_round_f = random.sample(range(1, Constants.num_rounds + 1), 2)
-            self.payoff = self.in_round(self.paying_round_f).payoff_forecasting + self.in_round(
-                self.paying_round_e).payoff_entry
+                if participation_stage:
+                    self.payoff = self.in_round(self.paying_round_f).payoff_forecasting + self.in_round(
+                        self.paying_round_e).payoff_entry
+                else:
+                    self.payoff = float(self.in_round(self.paying_round_f).payoff_forecasting) + float(self.in_round(
+                        self.paying_round_e).payoff_forecasting)
+
         else:
             self.payoff = 0

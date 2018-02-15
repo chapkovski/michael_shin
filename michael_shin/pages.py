@@ -68,7 +68,11 @@ class FinalResults(Page):
     def vars_for_template(self):
         ef = self.session.config.get('simultaneous_ef_payment', Constants.simultaneous_ef_payment)
         f_payoff = self.player.in_round(self.player.paying_round_f).payoff_forecasting
-        e_payoff = + self.player.in_round(self.player.paying_round_e).payoff_entry
+
+        if not ef and not self.subsession.participation_stage:
+            e_payoff = self.player.in_round(self.player.paying_round_e).payoff_forecasting
+        else:
+            e_payoff = self.player.in_round(self.player.paying_round_e).payoff_entry
 
         return {'ef': ef,
                 'f_payoff': f_payoff,

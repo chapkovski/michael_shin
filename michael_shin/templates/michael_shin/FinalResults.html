@@ -4,17 +4,83 @@
 
 {% block title %}{% endblock %}
 
-{% block inner_content %}
+{% block content %}
 
-    <p>We picked {% if ef or not  subsession.participation_stage %}
-        round {{ player.paying_round_e }} {% else %}
-        rounds {{ player.paying_round_f }}  and {{ player.paying_round_e }}
+
+
+
+    {% if ef %}
+        {% if subsession.participation_stage %}
+            <table class="table">
+                <tr>
+                    <td>The following round has been picked for payment:</td>
+                    <td>{{ player.paying_round_e }}</td>
+                </tr>
+                <tr>
+                    <td>In that round you have earned for forecasting:</td>
+                    <td>{{ f_payoff }}</td>
+                </tr>
+                <tr>
+                    <td>In that round you have earned for participation:</td>
+                    <td>{{ e_payoff }}</td>
+                </tr>
+            </table>
+        {% else %}
+            <table class="table">
+                <tr>
+                    <td>The following round has been picked for payment:</td>
+                    <td>{{ player.paying_round_e }}</td>
+                </tr>
+                <tr>
+                    <td>In that round you have earned for forecasting:</td>
+                    <td>{{ f_payoff }}</td>
+                </tr>
+            </table>
+        {% endif %}
+    {% else %}
+        {% if subsession.participation_stage %}
+            <table class="table">
+                <tr>
+                    <td>The round picked for payment for forecasting:</td>
+                    <td>{{ player.paying_round_f }}</td>
+                </tr>
+                <tr>
+                    <td>You earned for forecasting in this round:</td>
+                    <td>{{ f_payoff }}</td>
+                </tr>
+                <tr>
+                    <td>The round picked for payment for participation:</td>
+                    <td>{{ player.paying_round_e }}</td>
+                </tr>
+                <tr>
+                    <td>You earned for participation in this round:</td>
+                    <td>{{ e_payoff }}</td>
+                </tr>
+            </table>
+        {% else %}
+            <table class="table">
+                <tr>
+                    <td>The first round picked for payment for forecasting:</td>
+                    <td>{{ player.paying_round_f }}</td>
+                </tr>
+                <tr>
+                    <td>You earned for forecasting in this round:</td>
+                    <td>{{ f_payoff }}</td>
+                </tr>
+                <tr>
+                    <td>The second round picked for payment for forecasting:</td>
+                    <td>{{ player.paying_round_e }}</td>
+                </tr>
+                <tr>
+                    <td>You earned for forecasting in this round:</td>
+                    <td>{{ e_payoff }}</td>
+                </tr>
+            </table>
+        {% endif %}
     {% endif %}
-        for payoff with the values {{ f_payoff }} for
-        forecasting {% if subsession.participation_stage %} and {{ e_payoff }} points for participation  {% endif %}in
-        that round. </p>
 
-    <p> Thank you for participating.</p>
+
+    <h4> Thank you for participating.</h4>
 
     {% next_button %}
 
